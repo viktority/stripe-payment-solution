@@ -12,7 +12,7 @@ This README would normally document whatever steps are necessary to get your app
 
 Summary of set up: 
 
-- Clone Repository with "git clone git@bitbucket.org:chukwukaOnyeka/stripe-payment-solution.git"
+- Clone Repository with "git clone https://github.com/viktority/stripe-payment-solution.git"
 
 - Navigate to application.properties file and replace STRIPE_PUBLIC_KEY ,STRIPE_SECRET_KEY and destination_account with live keys.
 
