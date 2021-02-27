@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Checkout</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <script src="https://js.stripe.com/v3/"></script>
+    <script th:src="@{../js/index.js}"></script>
+</head>
+<body th:attr='clientSecret = ${stripePublicKey}'>
+
+<div class="container">
+    <div class="jumbotron">
+
+        <table class="table ">
+            <tr>
+                <h1 class="display-4">Test Marketplace</h1>
+                <p class="lead">Click on an item to purchase...</p>
+                <hr class="my-4">
+            </tr>
+            <tr>
+
+                <td th:each="item : ${items}">
+                     <span>
+                          <form>
+                        <div class="card" style="width: 18rem;">
+                            <img th:src="${item.getImage()}"
+                                 class="card-img-top" alt="...">
+                            <div class="card-body">
+                                <h5 class="card-title" th:text="${item.getName()}"></h5>
+                                <p class="card-text">Some quick example text to build on the card title and make up the
+                                    bulk of the card's content.</p>
+                                <a href="#" class="btn btn-primary inactive" id="checkout-button"
+                                   th:text=" ${'Buy For ' + item.getAmount()+ (item.getCurrency())}"
+                                   th:attr='client-secret = ${item.getClientSecret()}'
+                                   onclick="checkout(this.getAttribute('client-secret'));">Pay</a>
+                            </div>
+                        </div>
+                          </form>
+                     </span>
+                </td>
+            </tr>
+        </table>
+
+    </div>
+</div>
+</body>
+
+<script>
+    function checkout(sessionID) {
+        var stripkey = document.body.getAttribute("clientSecret");
+        var stripe = Stripe(stripkey);
+        stripe.redirectToCheckout({
+            // Make the id field from the Checkout Session creation API response
+            // available to this file, so you can provide it as argument here
+            // instead of the {{CHECKOUT_SESSION_ID}} placeholder.
+            sessionId: sessionID
+        }).then(function (result) {
+            // If `redirectToCheckout` fails due to a browser or network
+            // error, display the localized error message to your customer
+            // using `result.error.message`.
+        });
+    }
+</script>
+</html>
